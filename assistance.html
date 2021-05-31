@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- BOOSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <title>Check the assistance</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/8.6.2/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/8.6.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-database.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-functions.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-storage.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-analytics.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-remote-config.js"></script>
+    <script defer src="/__/firebase/8.6.2/firebase-performance.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message button { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; border-radius: 4px; width: 35px; height: 35px; margin-right: 10px;}
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      #contenedor {display: flex; flex-direction: row; margin-bottom: 20px;}
+      #botonSi {background-color:green !important;}
+      #botonNo {background-color: red !important;}
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">ATTENDANCE APP</a>
+      </div>
+    </nav>
+    <div id="message">
+      <h2>Marque la asistencia de los estudiantes</h2>
+      <ul id="studients"> 
+      </ul>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+
+
+
+          
+    //      db.collection('students')
+    //        .get()
+    //        .then(querySnapshot => {
+    //          const documents = querySnapshot.docs.map(doc => document.getElementById('studients').innerHTML += 
+    //        (`<li>${doc.data().name} ${doc.data().assisted ? '&check;': '&times;'}</li>
+    //        <div id="contenedor"> 
+    //          <button id="botonSi" onClick="cameToClass()"> &check;</>
+    //          <button id="botonNo" onClick="noCameToClass()"> &times;</>
+    //        </div>`))
+              // do something with documents
+     //       })
+
+            const db = firebase.firestore()
+            const gabriel = db.collection('students').doc('19255')
+
+            gabriel.onSnapshot((response) => {
+            console.log('db response', response.data())
+            document.getElementById('studients').innerHTML = 
+            (`<li onClick="cameToClass()">${response.data().name} ${response.data().assisted ? '&check;': '&times;'}</li>
+              <div id="contenedor"> 
+                <button id="botonSi" onClick="cameToClass()"> &check;</>
+                <button id="botonNo" onClick="noCameToClass()"> &times;</>
+                </div>`)
+          })
+            
+         
+
+          window.cameToClass = () => {
+            const db = firebase.firestore()
+            const gabriel = db.collection('students').doc('19255')
+            gabriel.update({assisted:true})
+            
+          }
+
+          window.noCameToClass = () => {
+            const db = firebase.firestore()
+            const gabriel = db.collection('students').doc('19255')
+            gabriel.update({assisted:false})
+            
+          }
+          const jose = db.collection('students').doc('19092')
+            
+          jose.onSnapshot((response) => {
+          console.log('db response', response.data())
+          document.getElementById('studients').innerHTML += 
+          (`<li onClick="cameToClass()">${response.data().name} ${response.data().assisted ? '&check;': '&times;'}</li>
+            <div id="contenedor"> 
+              <button id="botonSi" onClick="cameToClass2()"> &check;</>
+              <button id="botonNo" onClick="noCameToClass2()"> &times;</>
+              </div>`)
+        })
+          
+         
+
+          window.cameToClass2 = () => {
+            const db = firebase.firestore()
+            const jose = db.collection('students').doc('19092')
+            jose.update({assisted:true})
+            
+          }
+
+          window.noCameToClass2 = () => {
+            const db = firebase.firestore()
+            const jose = db.collection('students').doc('19092')
+            jose.update({assisted:false})
+            
+          }
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  </body>
+</html>
